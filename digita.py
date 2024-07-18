@@ -4,66 +4,59 @@ import speech_recognition as sr
 import webbrowser
 import wikipedia
 
-wikipedia.set_lang("pt")
 engine = pyttsx3.init("sapi5")
 engine.setProperty('voice', engine.getProperty("voices")[0].id)
+wikipedia.set_lang("pt")
 
 def speak(audio):
     engine.say(audio)
     engine.runAndWait()
-
-def get_command():
+    
+def getCommand():
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print("Ouvindo...")
+        print("Ouvindo")
         r.pause_threshold = 1
         audio = r.listen(source)
     try:
-        print("Reconhecendo...")
+        print("Reconhecendo")
         command = r.recognize_google(audio, language='pt-br')
-        print("Usuário falou:" + command + "\n")
+        print("usuário falou: " + command + "\n")
     except Exception as e:
         print(e)
-        speak("Eu não entendo")
-        return "None"
+        speak("Não entendi")
+        return ""
     return command
 
-if __name__ == '__main__':
-    speak("Amigo foi ativado ")
+if __name__ == "__main__":
+    speak("Assistente Digita foi ativada")
     speak("Como eu posso te ajudar?")
-    while True:
-        command = get_command().lower()
+
+    while(True):
+        command = getCommand().lower()
         if 'wikipédia' in command:
-            speak("Procurando na Wikipedia ...")
-            command = command.replace("wikipédia", '')
-            command = command.replace("Procure na", '')
+            command = command.replace("wikipédia","")
+            command = command.replace("procure na","")
+            command = command.replace("pesquise na","")
+
             results = wikipedia.summary(command, sentences=2)
-            speak("De acordo com a Wikipédia")
+            speak("De Acordo com a Wikipédia")
             speak(results)
-        elif 'como você vai' in command:
-            speak("Olá amigo, eu vou bem, obrigado por perguntar")
-        elif 'abrir youtube' in command:
-            speak("Abrindo o Navegador com o youtube")
+        elif 'youtube' in command:
+            speak("Abrindo o Youtube")
             webbrowser.open("youtube.com")
-        elif 'abrir o google' in command:
-            speak("Abrindo o google")
+            exit(0)
+        elif 'google' in command:
+            speak("Abrindo o Google")
             webbrowser.open("google.com")
-        elif 'abrir github' in command:
-            speak("Abrindo o github")
-            webbrowser.open("github.com")
-        elif 'abrir o stackoverflow' in command:
-            speak("Abrindo o stackoverflow")
-            webbrowser.open("stackoverflow.com")
-        elif 'abrir o spotify' in command:
-            speak("Abrindo o spotify")
-            webbrowser.open("spotify.com")
-        elif 'abrir a calculadora' in command:
-            speak("Abrindo a calculadora")
+            exit(0)
+        elif 'c2 pontos' in command:
+            speak("Abrindo o C:")
+            webbrowser.open("C://")
+        elif 'calculadora' in command:
+            speak("Abrindo a Calculadora")
             loc = "C:\\Windows\\System32\\calc.exe"
             os.startfile(loc)
-        elif 'abrir pasta c:' in command:
-            speak("Abrindo o C:")
-            webbrowser.open("D://")
         elif 'tchau' in command:
             speak("Tchau Tchau")
             exit(0)
